@@ -12,7 +12,11 @@ public class NodeView : Node
     public Port Input;
     public Port Output;
 
-    public NodeView(BTNode node) :base("Assets/BehaviourTree/Editor/NodeView.uxml"){
+    SerializedObject Node_SerializedObj;
+
+    public NodeView(BTNode node,string uiFile) 
+        :base(uiFile)
+    {
         Node = node;
         title = node.name;
         viewDataKey = node.guid;
@@ -24,12 +28,35 @@ public class NodeView : Node
         CreateOutputPorts();
         SetupClasses();
 
-        Label descriptionLabel = this.Q<Label>("description");
-        
-        descriptionLabel.Bind(new SerializedObject(node));
-        descriptionLabel.bindingPath = "Description";
+        BindInspector();
 
         node.OnEndEvent = OnNodeEnd;
+    }
+
+    void BindInspector() {
+        Node_SerializedObj = new SerializedObject(Node);
+        Label descriptionLabel = this.Q<Label>("description");
+        descriptionLabel.Bind(Node_SerializedObj);
+        descriptionLabel.bindingPath = "Description";
+        switch (Node)
+        {
+            case SequencerNode sequencerNode:
+                {
+                    var enumField = this.Q<EnumField>("returnType");
+                    enumField.Bind(Node_SerializedObj);
+                    enumField.bindingPath = "ReturnType";
+                }
+                break;
+            case ParallelNode parallelNode:
+                {
+                    var enumField = this.Q<EnumField>("returnType");
+                    enumField.Bind(Node_SerializedObj);
+                    enumField.bindingPath = "ReturnType";
+                }
+                break;
+            default:
+                break;
+        }
     }
 
 

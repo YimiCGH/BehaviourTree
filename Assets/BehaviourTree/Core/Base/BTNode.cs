@@ -15,7 +15,7 @@ namespace BT {
         public bool Started = false;
         public bool End = false;
 
-        [TextArea] public string Description;
+        [TextArea] public string Description = "√Ë ˆ...";
 
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;

@@ -66,6 +66,7 @@
     <Compile Include="Assets\BehaviourTree\Editor\NodeView.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\BehaviourTree\Editor\SequencerNodeView.uxml" />
     <None Include="Assets\BehaviourTree\Editor\BehaviourTreeEditor.uss" />
     <None Include="Assets\BehaviourTree\Editor\NodeViewStyle.uss" />
     <None Include="Assets\BehaviourTree\Editor\BehaviourTreeEditor.uxml" />

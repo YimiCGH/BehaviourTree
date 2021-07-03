@@ -150,7 +150,21 @@ public class BehaviourTreeView : GraphView
     }
 
     void CreateNodeView(BTNode node) {
-        NodeView nodeView = new NodeView(node);
+        string uiFile ;
+        switch (node)
+        {            
+            case SequencerNode sequencerNode:
+                uiFile = "Assets/BehaviourTree/Editor/SequencerNodeView.uxml";
+                break;
+            case ParallelNode parallelNode:
+                uiFile = "Assets/BehaviourTree/Editor/SequencerNodeView.uxml";
+                break;
+            default:
+                uiFile = "Assets/BehaviourTree/Editor/NodeView.uxml";
+                break;
+        }
+
+        NodeView nodeView = new NodeView(node, uiFile);
         nodeView.OnNodeSelected = OnNodeSelected;
         AddElement(nodeView);
     }
