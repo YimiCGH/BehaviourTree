@@ -1,0 +1,24 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="True">
+    <Style src="NodeViewStyle.uss" />
+    <ui:VisualElement name="node-border" style="left: 0; top: 0; right: 0; bottom: 0;">
+        <ui:VisualElement name="contents">
+            <ui:VisualElement name="top">
+                <ui:VisualElement name="input" />
+                <ui:VisualElement name="divider" class="vertical" />
+                <ui:VisualElement name="title">
+                    <ui:Label name="title-label" text="RepeatNode" class="unity-text-element unity-label" style="border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); background-color: rgba(0, 0, 0, 0.22);" />
+                    <ui:VisualElement name="title-button-container" style="background-color: rgba(0, 0, 0, 255);">
+                        <ui:VisualElement name="collapse-button">
+                            <ui:VisualElement name="icon" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:Label text="This is a description" display-tooltip-when-elided="true" name="description" picking-mode="Ignore" style="min-width: auto; min-height: 20px; background-color: rgba(0, 0, 0, 0);" />
+                <ui:VisualElement name="divider" class="horizontal" />
+                <ui:VisualElement name="statebar" style="flex-shrink: 1; flex-basis: auto; flex-direction: column;" />
+                <ui:VisualElement name="output" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+    <ui:VisualElement name="selection-border" picking-mode="Ignore" />
+</ui:UXML>
