@@ -9,8 +9,8 @@ namespace BT
     {
         public enum E_ReturnType
         {
-            ReturnWhenSuccess, //只要一个成功，就退出，全部失败才返回失败（不会被失败的节点截断执行，会一直执行有成功的节点）
-            ReturnWhenFailure  //只要一个失败，就退出，全部成功才返回成功（会被失败的节点截断执行）
+            ChildSuccess, //只要一个成功，就退出，全部失败才返回失败（不会被失败的节点截断执行，会一直执行有成功的节点）
+            ChildFailure  //只要一个失败，就退出，全部成功才返回成功（会被失败的节点截断执行）
         };
         public E_ReturnType ReturnType;
 
@@ -27,12 +27,12 @@ namespace BT
 
         protected override E_State OnUpdate()
         {
-            return ReturnType == E_ReturnType.ReturnWhenSuccess ? ReturnWhenSuccess() : ReturnWhenFailure();
+            return ReturnType == E_ReturnType.ChildSuccess ? ReturnWhenChildSuccess() : ReturnWhenChildFailure();
         }     
 
     
 
-        E_State ReturnWhenSuccess()
+        E_State ReturnWhenChildSuccess()
         {
             var child = Children[_current];
             switch (child.Update())
@@ -47,7 +47,7 @@ namespace BT
             }
             return _current == Children.Count ?  E_State.Failure: E_State.Running;
         }
-        E_State ReturnWhenFailure()
+        E_State ReturnWhenChildFailure()
         {
             var child = Children[_current];
             switch (child.Update())

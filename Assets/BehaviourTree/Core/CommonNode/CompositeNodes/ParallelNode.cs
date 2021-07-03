@@ -7,9 +7,9 @@ namespace BT
     {
 
         public enum E_ReturnType
-        {
-            SuccessWhenAllSuccess, //只要一个失败，就退出，返回失败，只有全部成功才返回成功
-            FailureWhenAllFailure  //只要一个成功，就退出，返回成功，只有全部失败才返回失败
+        {            
+            ChildSuccess,  //只要一个成功，就退出，返回成功，只有全部失败才返回失败
+            ChildFailure //只要一个失败，就退出，返回失败，只有全部成功才返回成功
         };
 
         public E_ReturnType ReturnType;
@@ -28,10 +28,10 @@ namespace BT
         //并行执行所有子节点
         protected override E_State OnUpdate()
         {
-            return ReturnType == E_ReturnType.SuccessWhenAllSuccess ? ReturnAllSuccess() : ReturnAllFailure();
+            return ReturnType == E_ReturnType.ChildFailure ? ReturnWhenChildFailure() : ReturnWhenChildSuccess();
         }
 
-        E_State ReturnAllSuccess(){
+        E_State ReturnWhenChildFailure(){
             bool isRunning = false;
             foreach (var child in Children)
             {
@@ -56,7 +56,7 @@ namespace BT
             return E_State.Success;
         }
 
-        E_State ReturnAllFailure()
+        E_State ReturnWhenChildSuccess()
         {
             bool isRunning = false;
             foreach (var child in Children)
