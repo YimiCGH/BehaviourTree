@@ -131,7 +131,9 @@ public class NodeView : Node
         if (Output != null)
         {
             Output.portName = "";
+            var connector = Output.Q<VisualElement>("cap");
             Output.style.flexDirection = FlexDirection.ColumnReverse;
+            
             outputContainer.Add(Output);
         }
     }

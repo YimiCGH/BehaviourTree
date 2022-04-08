@@ -65,7 +65,7 @@ MonoBehaviour:
   End: 0
   Description: "\u5927\u82CF\u6253\u5927\u82CF\u5927\u82CF\u6253\u5927\u82CF\u5927\u82CF\u6253\u5927\u82CF\u5927\u82CF\u6253\u5927\u82CF\u5927\u82CF\u6253\u5927\u82CF\u5927"
   guid: b68cca23be979014cbe230444654ec82
-  position: {x: -240, y: 125}
+  position: {x: -223, y: 97.00001}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -93,7 +93,7 @@ MonoBehaviour:
   End: 0
   Description: 
   guid: e773bccc49dd9a54ea06747007ea80af
-  position: {x: 213.965, y: 365}
+  position: {x: 239, y: 338}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -195,7 +195,7 @@ MonoBehaviour:
   End: 0
   Description: 'asda '
   guid: fae36cfaf77a150498d51333b504bf10
-  position: {x: -223, y: 325}
+  position: {x: -229, y: 338}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -247,7 +247,7 @@ MonoBehaviour:
   End: 0
   Description: 
   guid: ad88d284f6711664ca70cb9bb9b0f0ca
-  position: {x: -223, y: -103.68002}
+  position: {x: -185, y: -101}
   blackboard:
     RunningDisplay: 0
     TargetId: 0

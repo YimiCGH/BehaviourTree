@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
-
-namespace BT
+﻿namespace BT
 {
     public class ParallelNode : CompositeNode
     {

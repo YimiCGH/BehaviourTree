@@ -1,4 +1,4 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System;
@@ -29,7 +29,7 @@ public class BehaviourTreeView : GraphView
 
     private void OnUndoRedo()
     {
-        PopulateView(_tree);
+        UpdateTreeView(_tree);
         AssetDatabase.SaveAssets();
     }
 
@@ -38,10 +38,10 @@ public class BehaviourTreeView : GraphView
     }
 
     /// <summary>
-    /// �����ͼ
+    /// 刷新视图
     /// </summary>
     /// <param name="tree"></param>
-    internal void PopulateView(BehaviourTree tree)
+    internal void UpdateTreeView(BehaviourTree tree)
     {
         _tree = tree;
         graphViewChanged -= OnGraphViewChanged;
@@ -93,7 +93,6 @@ public class BehaviourTreeView : GraphView
                     NodeView childView = edge.input.node as NodeView;
                     _tree.RemoveChild(parentView.Node, childView.Node);
                 }
-
             });
         }
 
@@ -114,9 +113,13 @@ public class BehaviourTreeView : GraphView
             });
         }
 
-
         return graphViewChange;
     }
+
+    /// <summary>
+    /// 右键菜单命令
+    /// </summary>
+    /// <param name="evt"></param>
 
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
@@ -150,7 +153,7 @@ public class BehaviourTreeView : GraphView
     }
 
     void CreateNodeView(BTNode node) {
-        string uiFile ;
+        string uiFile ;//各种节点可以自定义界面
         switch (node)
         {            
             case SequencerNode sequencerNode:

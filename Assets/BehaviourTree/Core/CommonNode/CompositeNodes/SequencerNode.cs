@@ -1,10 +1,5 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace BT
+﻿namespace BT
 {
-    
-
     public class SequencerNode : CompositeNode
     {
         public enum E_ReturnType

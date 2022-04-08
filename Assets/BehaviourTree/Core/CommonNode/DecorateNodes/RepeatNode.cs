@@ -1,7 +1,4 @@
-﻿using UnityEditor;
-using UnityEngine;
-
-namespace BT
+﻿namespace BT
 {
     public class RepeatNode : DecoratorNode
     {     

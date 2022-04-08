@@ -1,9 +1,10 @@
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Callbacks;
 using BT;
 using System;
+using UnityEditor.UIElements;
 
 public class BehaviourTreeEditor : EditorWindow
 {
@@ -62,6 +63,8 @@ public class BehaviourTreeEditor : EditorWindow
 
         treeView.OnNodeSelected = OnNodeSelectionChange;
 
+        var create = root.Q<ToolbarButton>("create-btn");
+        create.clicked += OnClickCreate;
         OnSelectionChange();
     }
 
@@ -112,14 +115,15 @@ public class BehaviourTreeEditor : EditorWindow
 
         if (Application.isPlaying)
         {
-            if (tree){
-                treeView.PopulateView(tree);
+            if (tree && treeView != null)
+            {
+                treeView.UpdateTreeView(tree);
             }
         }
         else {
             if (tree && AssetDatabase.CanOpenAssetInEditor(tree.GetInstanceID()))
             {
-                treeView.PopulateView(tree);
+                treeView.UpdateTreeView(tree);
             }
         }
 
@@ -141,5 +145,24 @@ public class BehaviourTreeEditor : EditorWindow
         if (treeView != null) {
             treeView.UpdateNodeStates();
         }
+    }
+
+    void OnClickCreate() {
+        var path =  EditorUtility.SaveFilePanel("创建行为树","Assets/BehaviourTree/BT","BT_New","asset");
+        if (string.IsNullOrEmpty(path)) {
+            return;
+        }
+        path = ToPrjectPath(path);
+
+        var bt = ScriptableObject.CreateInstance<BehaviourTree>();
+        AssetDatabase.CreateAsset(bt, path);
+        Selection.activeObject = bt;
+        AssetDatabase.Refresh();
+    }
+
+
+    static string ToPrjectPath(string _path) {
+        var dataPath = Application.dataPath;
+        return "Assets" + _path.Remove(0,dataPath.Length);
     }
 }

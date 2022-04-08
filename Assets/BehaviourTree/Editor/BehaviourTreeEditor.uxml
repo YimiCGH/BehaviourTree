@@ -1,23 +1,23 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
-    <Style src="BehaviourTreeEditor.uss" />
+    <Style src="project://database/Assets/BehaviourTree/Editor/BehaviourTreeEditor.uss?fileID=7433441132597879392&amp;guid=c43f0bfbca3175343b2d22b34969eaf5&amp;type=3#BehaviourTreeEditor" />
     <uie:Toolbar>
-        <uie:ToolbarMenu display-tooltip-when-elided="true" text="Create" />
+        <uie:ToolbarButton text="Create" display-tooltip-when-elided="true" name="create-btn" />
     </uie:Toolbar>
     <SplitView orientation="Horizontal" fixed-pane-initial-dimension="300" style="flex-shrink: 1;">
         <ui:VisualElement name="left-panel">
             <SplitView orientation="Vertical" fixed-pane-initial-dimension="185">
                 <ui:VisualElement name="inspector-container">
-                    <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgba(37, 37, 37, 255);" />
+                    <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
                     <InspectorView name="InspectorView" />
                 </ui:VisualElement>
                 <ui:VisualElement name="blackboard-container">
-                    <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgba(37, 37, 37, 255);" />
-                    <ui:IMGUIContainer style="border-left-width: 0; border-right-width: 0;" />
+                    <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
+                    <ui:IMGUIContainer style="border-left-width: 0; border-right-width: 0; flex-grow: 1; background-color: rgb(56, 56, 56);" />
                 </ui:VisualElement>
             </SplitView>
         </ui:VisualElement>
         <ui:VisualElement name="right-panel" style="flex-shrink: 0;">
-            <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgba(37, 37, 37, 255);" />
+            <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
             <BehaviourTreeView focusable="true" style="flex-grow: 1; flex-shrink: 1;" />
         </ui:VisualElement>
     </SplitView>

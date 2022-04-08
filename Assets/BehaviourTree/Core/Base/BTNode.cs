@@ -1,6 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+ï»¿using UnityEngine;
 namespace BT {
     public enum E_State
     {
@@ -15,7 +13,7 @@ namespace BT {
         public bool Started = false;
         public bool End = false;
 
-        [TextArea] public string Description = "ÃèÊö...";
+        [TextArea] public string Description = "æè¿°...";
 
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
