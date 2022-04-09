@@ -157,10 +157,13 @@ public class BehaviourTreeView : GraphView
         switch (node)
         {            
             case SequencerNode sequencerNode:
-                uiFile = "Assets/BehaviourTree/Editor/SequencerNodeView.uxml";
+                uiFile = "Assets/BehaviourTree/Editor/CompositeNodeView.uxml";
                 break;
             case ParallelNode parallelNode:
-                uiFile = "Assets/BehaviourTree/Editor/SequencerNodeView.uxml";
+                uiFile = "Assets/BehaviourTree/Editor/CompositeNodeView.uxml";
+                break;
+            case SelectorNode selectorNode:
+                uiFile = "Assets/BehaviourTree/Editor/SelectorNodeView.uxml";
                 break;
             default:
                 uiFile = "Assets/BehaviourTree/Editor/NodeView.uxml";

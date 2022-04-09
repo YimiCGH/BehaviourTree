@@ -17,7 +17,7 @@ MonoBehaviour:
   End: 0
   Description: 
   guid: c1c9c480fe9c0f64eac8e7ff480d7454
-  position: {x: -228.99994, y: 549}
+  position: {x: -229.00015, y: 580.93835}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
   End: 0
   Description: 1
   guid: 79ed2d651c7c12440b2b5927b78c349a
-  position: {x: -481.45996, y: 549}
+  position: {x: -481.00015, y: 580.93835}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -71,6 +71,8 @@ MonoBehaviour:
     TargetId: 0
     TargetPosition: {x: 0, y: 0, z: 0}
     IsTargetAlive: 0
+  PreRun: 
+  EndRun: 
   Children:
   - {fileID: -483339748700338130}
   - {fileID: 606423924307813923}
@@ -117,7 +119,7 @@ MonoBehaviour:
   End: 0
   Description: repeat
   guid: 551ede06a168551428c3ea98093037f5
-  position: {x: 214.00003, y: 549.32263}
+  position: {x: 238.99983, y: 580.93835}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -201,6 +203,8 @@ MonoBehaviour:
     TargetId: 0
     TargetPosition: {x: 0, y: 0, z: 0}
     IsTargetAlive: 0
+  PreRun: 
+  EndRun: 
   Children:
   - {fileID: -4889096570159796423}
   - {fileID: -8193732497710386234}
@@ -223,7 +227,7 @@ MonoBehaviour:
   End: 0
   Description: 666
   guid: 17eb38e2006373c4585b314c83b0ed55
-  position: {x: -228.99994, y: 709.00006}
+  position: {x: -229.00015, y: 740.93835}
   blackboard:
     RunningDisplay: 0
     TargetId: 0
@@ -271,7 +275,7 @@ MonoBehaviour:
   End: 0
   Description: 2
   guid: 02f2dd58bd0c82a4f9b816abd0406070
-  position: {x: -53.99995, y: 549}
+  position: {x: -54.000107, y: 580.93835}
   blackboard:
     RunningDisplay: 0
     TargetId: 0

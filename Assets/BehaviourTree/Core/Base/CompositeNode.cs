@@ -6,6 +6,8 @@ namespace BT
 {
     public abstract class CompositeNode : BTNode
     {
+        public string PreRun;
+        public string EndRun;
         public List<BTNode> Children = new List<BTNode>();
 
         public override BTNode Clone()

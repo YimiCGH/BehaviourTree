@@ -23,6 +23,8 @@ public class NodeView : Node
 
         style.left = node.position.x;
         style.top = node.position.y;
+        if (Node is CompositeNode)
+            style.minWidth = 250;
 
         CreateInputPorts();
         CreateOutputPorts();
@@ -35,27 +37,40 @@ public class NodeView : Node
 
     void BindInspector() {
         Node_SerializedObj = new SerializedObject(Node);
-        Label descriptionLabel = this.Q<Label>("description");
-        descriptionLabel.Bind(Node_SerializedObj);
-        descriptionLabel.bindingPath = "Description";
+        Label descriptionLabel = this.Q<Label>("description");//通过UXML中的元素名称获取VisualElement
+        descriptionLabel.Bind(Node_SerializedObj);//绑定序列化对象
+        descriptionLabel.bindingPath = "Description";//绑定序列化对象的属性名称
         switch (Node)
         {
             case SequencerNode sequencerNode:
                 {
-                    var enumField = this.Q<EnumField>("returnType");
+                    var enumField = this.Q<EnumField>("returntype");
                     enumField.Bind(Node_SerializedObj);
                     enumField.bindingPath = "ReturnType";
                 }
                 break;
             case ParallelNode parallelNode:
                 {
-                    var enumField = this.Q<EnumField>("returnType");
+                    var enumField = this.Q<EnumField>("returntype");
                     enumField.Bind(Node_SerializedObj);
                     enumField.bindingPath = "ReturnType";
                 }
                 break;
             default:
                 break;
+        }
+        if (Node is CompositeNode) {
+            var prerun = this.Q<TextField>("prerun");
+            if (prerun != null) {
+                prerun.Bind(Node_SerializedObj);
+                prerun.bindingPath = "PreRun";
+            }
+            
+            var endrun = this.Q<TextField>("endrun");
+            if (endrun != null) {
+                endrun.Bind(Node_SerializedObj);
+                endrun.bindingPath = "EndRun";
+            }
         }
     }
 

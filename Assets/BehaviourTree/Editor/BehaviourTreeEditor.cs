@@ -3,7 +3,6 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Callbacks;
 using BT;
-using System;
 using UnityEditor.UIElements;
 
 public class BehaviourTreeEditor : EditorWindow
@@ -14,6 +13,8 @@ public class BehaviourTreeEditor : EditorWindow
 
     SerializedObject treeObject;
     SerializedProperty blackboardProperty;
+
+    BehaviourTree CurEditrTree;
 
     [MenuItem("BehaviourTreeEditor/Open Editor")]
     public static void OpenEditor()
@@ -33,16 +34,13 @@ public class BehaviourTreeEditor : EditorWindow
 
     public void CreateGUI()
     {
-        // Each editor window contains a root VisualElement object
         VisualElement root = rootVisualElement;
-
    
         // Import UXML
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/BehaviourTree/Editor/BehaviourTreeEditor.uxml");
-        visualTree.CloneTree(root);        
+        visualTree.CloneTree(root);
 
-        // A stylesheet can be added to a VisualElement.
-        // The style will be applied to the VisualElement and all of its children.
+        // 加载样式表，样式会应用到这个 VisualElement 以及它所有的子对象中
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/BehaviourTree/Editor/BehaviourTreeEditor.uss");   
         root.styleSheets.Add(styleSheet);
 
@@ -61,11 +59,19 @@ public class BehaviourTreeEditor : EditorWindow
             }            
         };
 
-        treeView.OnNodeSelected = OnNodeSelectionChange;
+        BindToolbarBtn(root);
 
+        treeView.OnNodeSelected = OnNodeSelectionChange;
+        OnSelectionChange();
+    }
+
+    void BindToolbarBtn(VisualElement root) {
         var create = root.Q<ToolbarButton>("create-btn");
         create.clicked += OnClickCreate;
-        OnSelectionChange();
+        var open = root.Q<ToolbarButton>("open-btn");
+        open.clicked += OnClickOpen;
+        var savelua = root.Q<ToolbarButton>("savelua-btn");
+        savelua.clicked += OnClickSaveLua;
     }
 
     private void OnEnable()
@@ -98,7 +104,6 @@ public class BehaviourTreeEditor : EditorWindow
         }
     }
 
-    
 
     private void OnSelectionChange()
     {
@@ -130,6 +135,7 @@ public class BehaviourTreeEditor : EditorWindow
         if (tree != null) {
             treeObject = new SerializedObject(tree);
             blackboardProperty = treeObject.FindProperty("Blackboard");
+            CurEditrTree = tree;
         }
     }
 
@@ -158,6 +164,30 @@ public class BehaviourTreeEditor : EditorWindow
         AssetDatabase.CreateAsset(bt, path);
         Selection.activeObject = bt;
         AssetDatabase.Refresh();
+    }
+    void OnClickOpen() {
+        var path = EditorUtility.OpenFilePanel("打开行为树", "Assets/BehaviourTree/BT", "asset");
+        if (string.IsNullOrEmpty(path))
+        {
+            return;
+        }
+        path = ToPrjectPath(path);
+        var asset = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
+        if (asset == null) {
+            Debug.LogError("打开失败,"+path);
+            return;
+        }
+        AssetDatabase.OpenAsset(asset);
+    }
+
+    void OnClickSaveLua() {
+        var path = EditorUtility.SaveFilePanel("导出lua", "Assets/BehaviourTree/BT", "BT_New", "asset");
+        if (string.IsNullOrEmpty(path))
+        {
+            return;
+        }
+
+        LuaSaveHelper.ExportLua(CurEditrTree, path);
     }
 
 
