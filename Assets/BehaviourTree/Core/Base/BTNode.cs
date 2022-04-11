@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Sirenix.OdinInspector;
+using UnityEngine;
 namespace BT {
     public enum E_State
     {
@@ -9,8 +10,10 @@ namespace BT {
     public abstract class BTNode : ScriptableObject
     {
         public E_State State = E_State.Running;
-        
+
+        [ReadOnly]
         public bool Started = false;
+        [ReadOnly]
         public bool End = false;
 
         [TextArea] public string Description = "描述...";

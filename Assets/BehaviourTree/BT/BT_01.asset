@@ -78,6 +78,57 @@ MonoBehaviour:
   - {fileID: 606423924307813923}
   - {fileID: -2679175035542020345}
   ReturnType: 1
+--- !u!114 &-3376482310442135058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 281f3a4c5d7aa444284bc71a0b8dc42c, type: 3}
+  m_Name: ConditionNode
+  m_EditorClassIdentifier: 
+  State: 0
+  Started: 0
+  End: 0
+  Description: "\u63CF\u8FF0..."
+  guid: f145c57f9e59d1a43a2ed0d9be66741e
+  position: {x: 342, y: 97.000015}
+  blackboard:
+    RunningDisplay: 0
+    TargetId: 0
+    TargetPosition: {x: 0, y: 0, z: 0}
+    IsTargetAlive: 0
+  ConditionConfig:
+    ConditionType: 0
+    Conditions:
+    - Value1_Type: 0
+      Value1_Name: 
+      CompareType: ==
+      Value2_Type: 0
+      Value2_Name: 
+    - Value1_Type: 0
+      Value1_Name: 
+      CompareType: ==
+      Value2_Type: 0
+      Value2_Name: 
+    - Value1_Type: 0
+      Value1_Name: 
+      CompareType: ==
+      Value2_Type: 0
+      Value2_Name: 
+    - Value1_Type: 0
+      Value1_Name: 
+      CompareType: ==
+      Value2_Type: 0
+      Value2_Name: 
+    - Value1_Type: 0
+      Value1_Name: 
+      CompareType: ==
+      Value2_Type: 0
+      Value2_Name: 
 --- !u!114 &-2679175035542020345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,6 +226,7 @@ MonoBehaviour:
   - {fileID: 606423924307813923}
   - {fileID: -8193732497710386234}
   - {fileID: 2877644646811016898}
+  - {fileID: -3376482310442135058}
   Blackboard:
     RunningDisplay: 0
     TargetId: 0
