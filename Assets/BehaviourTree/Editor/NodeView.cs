@@ -20,7 +20,6 @@ public class NodeView : Node
         Node = node;
         title = node.name;
         viewDataKey = node.guid;
-
         style.left = node.position.x;
         style.top = node.position.y;
         if (Node is CompositeNode)

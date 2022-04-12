@@ -19,7 +19,7 @@ namespace BT {
         [TextArea] public string Description = "描述...";
 
         [HideInInspector] public string guid;
-        [HideInInspector] public Vector2 position;
+        [ReadOnly] public Vector2 position;
         [HideInInspector] public BTBlackboard blackboard;
 
 #if UNITY_EDITOR

@@ -26,7 +26,6 @@ public class BehaviourTreeView : GraphView
 
         Undo.undoRedoPerformed += OnUndoRedo;
     }
-
     private void OnUndoRedo()
     {
         UpdateTreeView(_tree);
@@ -49,7 +48,7 @@ public class BehaviourTreeView : GraphView
         graphViewChanged += OnGraphViewChanged;
 
         if (_tree.rootNode == null) {
-            _tree.rootNode = _tree.CreateNode<StartNode>();
+            _tree.rootNode = CreateNode<StartNode>(new Vector2(0,0));
             EditorUtility.SetDirty(_tree);
             AssetDatabase.SaveAssets();
         }
@@ -84,14 +83,14 @@ public class BehaviourTreeView : GraphView
             graphViewChange.elementsToRemove.ForEach( element => {
                 NodeView nodeView = element as NodeView;
                 if (nodeView != null) {
-                    _tree.DeleteNode(nodeView.Node);
+                    DeleteNode(nodeView.Node);
                 }
 
                 Edge edge = element as Edge;
                 if (edge != null) {
                     NodeView parentView = edge.output.node as NodeView;
                     NodeView childView = edge.input.node as NodeView;
-                    _tree.RemoveChild(parentView.Node, childView.Node);
+                    RemoveChild(parentView.Node, childView.Node);
                 }
             });
         }
@@ -100,7 +99,7 @@ public class BehaviourTreeView : GraphView
             graphViewChange.edgesToCreate.ForEach( edge => {
                 NodeView parentView = edge.output.node as NodeView;
                 NodeView childView = edge.input.node as NodeView;
-                _tree.AddChild(parentView.Node,childView.Node);
+                AddChild(parentView.Node,childView.Node);
             });
         }
 
@@ -116,6 +115,7 @@ public class BehaviourTreeView : GraphView
         return graphViewChange;
     }
 
+    private Vector2 localMousePosition;
     /// <summary>
     /// 右键菜单命令
     /// </summary>
@@ -123,6 +123,7 @@ public class BehaviourTreeView : GraphView
 
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
+        localMousePosition = evt.localMousePosition;
         //base.BuildContextualMenu(evt);
         {
             var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
@@ -148,7 +149,7 @@ public class BehaviourTreeView : GraphView
     }
 
     void CreateNode(System.Type type) {
-        var node = _tree.CreateNode(type);
+        var node = CreateNode(type,localMousePosition);
         CreateNodeView(node);
     }
 
@@ -169,6 +170,7 @@ public class BehaviourTreeView : GraphView
                 uiFile = "Assets/BehaviourTree/Editor/NodeView.uxml";
                 break;
         }
+        //m_editorWindow.rootVisualElement.ChangeCoordinatesTo(m_editorWindow.rootVisualElement.parent,m_editorWindow.position)
 
         NodeView nodeView = new NodeView(node, uiFile);
         nodeView.OnNodeSelected = OnNodeSelected;
@@ -208,4 +210,89 @@ public class BehaviourTreeView : GraphView
             }
         });
     }
+
+    #region 添加删除节点
+
+    public T CreateNode<T>(Vector2 pos) where T : BTNode
+    {
+        return CreateNode(typeof(T), pos) as T;
+    }
+
+    public BTNode CreateNode(System.Type type, Vector2 pos)
+    {
+        var node = ScriptableObject.CreateInstance(type) as BTNode;
+        node.name = type.Name;
+        node.guid = GUID.Generate().ToString();
+        node.position = pos;
+
+        Undo.RecordObject(_tree, "BT (CreateNode)");
+        _tree.Nodes.Add(node);
+
+        if (!Application.isPlaying)
+        {
+            AssetDatabase.AddObjectToAsset(node, _tree);
+        }
+
+        Undo.RegisterCreatedObjectUndo(node, "BT (CreateNode)");
+        AssetDatabase.SaveAssets();
+
+        return node;
+    }
+
+    public void DeleteNode(BTNode node)
+    {
+        Undo.RecordObject(_tree, "BT (DeleteNode)");
+
+        _tree.Nodes.Remove(node);
+        //AssetDatabase.RemoveObjectFromAsset(node);
+        Undo.DestroyObjectImmediate(node); //可撤销的销毁
+
+        AssetDatabase.SaveAssets();
+    }
+
+    public void AddChild(BTNode parent, BTNode child)
+    {
+        Undo.RecordObject(parent, "BT (AddChild)");
+
+        switch (parent)
+        {
+            case DecoratorNode decoratorNode:
+                decoratorNode.Child = child;
+                break;
+            case CompositeNode compositeNode:
+                compositeNode.Children.Add(child);
+                break;
+            case StartNode startNode:
+                startNode.Child = child;
+                break;
+            default:
+                break;
+        }
+
+        EditorUtility.SetDirty(_tree);
+    }
+
+    public void RemoveChild(BTNode parent, BTNode child)
+    {
+        Undo.RecordObject(parent, "BT (RemoveChild)");
+
+        switch (parent)
+        {
+            case DecoratorNode decoratorNode:
+                decoratorNode.Child = null;
+                break;
+            case CompositeNode compositeNode:
+                compositeNode.Children.Remove(child);
+                break;
+            case StartNode startNode:
+                startNode.Child = null;
+                break;
+            default:
+                break;
+        }
+
+        EditorUtility.SetDirty(_tree);
+    }
+
+    #endregion
 }

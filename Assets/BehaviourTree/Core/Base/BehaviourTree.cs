@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 namespace BT
 {
-    [CreateAssetMenu(menuName ="BehaviourTree",fileName ="BT_New")]
     public class BehaviourTree : ScriptableObject
     {
         public BTNode rootNode;
@@ -82,78 +80,6 @@ namespace BT
                 }                
             }
         }
-        #endregion
-
-        #region Editor
-        public T CreateNode<T>()  where T :BTNode{
-            return CreateNode(typeof(T)) as T;
-        }
-        public BTNode CreateNode(System.Type type) {
-            var node = ScriptableObject.CreateInstance(type) as BTNode;
-            node.name = type.Name;
-            node.guid = GUID.Generate().ToString();
-
-            Undo.RecordObject(this, "BT (CreateNode)");
-            Nodes.Add(node);
-
-            if (!Application.isPlaying) {
-                AssetDatabase.AddObjectToAsset(node, this);
-            }
-            
-            Undo.RegisterCreatedObjectUndo(node, "BT (CreateNode)");
-            AssetDatabase.SaveAssets();
-            
-            return node;
-        }
-        public void DeleteNode(BTNode node) {
-            Undo.RecordObject(this, "BT (DeleteNode)");
-
-            Nodes.Remove(node);
-            //AssetDatabase.RemoveObjectFromAsset(node);
-            Undo.DestroyObjectImmediate(node);//可撤销的销毁
-
-            AssetDatabase.SaveAssets();
-        }
-
-        public void AddChild(BTNode parent,BTNode child) {
-            Undo.RecordObject(parent, "BT (AddChild)");
-
-            switch (parent)
-            {                
-                case DecoratorNode decoratorNode:
-                    decoratorNode.Child = child;
-                    break;
-                case CompositeNode compositeNode:
-                    compositeNode.Children.Add(child);
-                    break;
-                case StartNode startNode:
-                    startNode.Child = child;
-                    break;
-                default:
-                    break;
-            }
-            EditorUtility.SetDirty(this);
-        }
-        public void RemoveChild(BTNode parent, BTNode child) {
-            Undo.RecordObject(parent, "BT (RemoveChild)");
-
-            switch (parent)
-            {
-                case DecoratorNode decoratorNode:
-                    decoratorNode.Child = null;
-                    break;
-                case CompositeNode compositeNode:
-                    compositeNode.Children.Remove(child);
-                    break;
-                case StartNode startNode:
-                    startNode.Child = null ;
-                    break;
-                default:
-                    break;
-            }
-            EditorUtility.SetDirty(this);
-        }
-
-        #endregion
+        #endregion        
     }
 }
