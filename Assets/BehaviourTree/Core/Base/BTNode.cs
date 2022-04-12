@@ -20,7 +20,7 @@ namespace BT {
 
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
-        [HideInInspector] public Blackboard blackboard;
+        [HideInInspector] public BTBlackboard blackboard;
         //[HideInInspector] public AIAgent agent;
 
 #if UNITY_EDITOR

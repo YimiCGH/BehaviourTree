@@ -1,0 +1,5 @@
+<UXML xmlns:ui="UnityEngine.UIElements">
+  <SGBlackboard name="SGBlackboard" class="SGBlackboard scrollable">
+    <SGBlackboardCategory class="blackboardCategory unnamed" />
+  </SGBlackboard>
+</UXML>

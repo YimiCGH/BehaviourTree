@@ -11,23 +11,23 @@ namespace BT
         public E_State treeState = E_State.Running;
         public List<BTNode> Nodes = new List<BTNode>();
 
-        public Blackboard Blackboard = new Blackboard();
+        public BTBlackboard Blackboard ;
   
         public E_State Update() {
             if (rootNode.State == E_State.Running) {
                 treeState = rootNode.Update();
 
 
-                Blackboard.RunningDisplay += Time.deltaTime * 50;
-                if (Blackboard.RunningDisplay > 100){
-                    Blackboard.RunningDisplay = 0;
-                }
+                // Blackboard.RunningDisplay += Time.deltaTime * 50;
+                // if (Blackboard.RunningDisplay > 100){
+                //     Blackboard.RunningDisplay = 0;
+                // }
             }
             return treeState;
         }
 
         public void Init() {
-            Blackboard.RunningDisplay = 0;
+            //Blackboard.RunningDisplay = 0;
             //初始化，让每个节点都可以访问黑板和 AI代理
             Traverse(rootNode, node => {
                 //绑定AI 代理

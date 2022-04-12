@@ -3,13 +3,16 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using UnityEditor.Callbacks;
 using BT;
+using BT.Util;
 using UnityEditor.UIElements;
+using UnityEditor.Experimental.GraphView;
 
 public class BehaviourTreeEditor : EditorWindow
 {
     BehaviourTreeView treeView;
     InspectorView inspectorView;
-    IMGUIContainer blackboardView;
+    //IMGUIContainer blackboardView;
+    BehaviourTreeBlackboardView blackboardView;
 
     SerializedObject treeObject;
     SerializedProperty blackboardProperty;
@@ -47,22 +50,16 @@ public class BehaviourTreeEditor : EditorWindow
         treeView = root.Q<BehaviourTreeView>();
         inspectorView = root.Q<InspectorView>();
 
-        blackboardView = root.Q<IMGUIContainer>();
-        blackboardView.onGUIHandler = () =>
-        {
-            if (treeObject != null && treeObject.targetObject != null) {
-                int id = treeObject.targetObject.GetInstanceID();
-                
-                treeObject.Update();
-                EditorGUILayout.PropertyField(blackboardProperty);
-                treeObject.ApplyModifiedProperties();
-            }            
-        };
+        BindBlackboard(root);
 
         BindToolbarBtn(root);
 
         treeView.OnNodeSelected = OnNodeSelectionChange;
         OnSelectionChange();
+    }
+
+    void BindBlackboard(VisualElement root) {
+        blackboardView = new BehaviourTreeBlackboardView(root, treeView);
     }
 
     void BindToolbarBtn(VisualElement root) {
@@ -78,8 +75,6 @@ public class BehaviourTreeEditor : EditorWindow
     {
         EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
         EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
-
-       
     }
     private void OnDisable()
     {
@@ -158,7 +153,7 @@ public class BehaviourTreeEditor : EditorWindow
         if (string.IsNullOrEmpty(path)) {
             return;
         }
-        path = ToPrjectPath(path);
+        path = PathUtil.ToPrjectPath(path);
 
         var bt = ScriptableObject.CreateInstance<BehaviourTree>();
         AssetDatabase.CreateAsset(bt, path);
@@ -171,7 +166,7 @@ public class BehaviourTreeEditor : EditorWindow
         {
             return;
         }
-        path = ToPrjectPath(path);
+        path = PathUtil.ToPrjectPath(path);
         var asset = AssetDatabase.LoadAssetAtPath<BehaviourTree>(path);
         if (asset == null) {
             Debug.LogError("打开失败,"+path);
@@ -190,9 +185,5 @@ public class BehaviourTreeEditor : EditorWindow
         LuaSaveHelper.ExportLua(CurEditrTree, path);
     }
 
-
-    static string ToPrjectPath(string _path) {
-        var dataPath = Application.dataPath;
-        return "Assets" + _path.Remove(0,dataPath.Length);
-    }
+    
 }

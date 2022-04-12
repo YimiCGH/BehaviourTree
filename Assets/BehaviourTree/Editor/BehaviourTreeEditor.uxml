@@ -5,22 +5,14 @@
         <uie:ToolbarButton text="Open" display-tooltip-when-elided="true" name="open-btn" />
         <uie:ToolbarButton text="导出lua" display-tooltip-when-elided="true" name="savelua-btn" />
     </uie:Toolbar>
-    <SplitView orientation="Horizontal" fixed-pane-initial-dimension="300" style="flex-shrink: 1;">
-        <ui:VisualElement name="left-panel">
-            <SplitView orientation="Vertical" fixed-pane-initial-dimension="250">
-                <ui:VisualElement name="inspector-container">
-                    <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <InspectorView name="InspectorView" />
-                </ui:VisualElement>
-                <ui:VisualElement name="blackboard-container">
-                    <ui:Label text="Blackboard" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
-                    <ui:IMGUIContainer style="border-left-width: 0; border-right-width: 0; flex-grow: 1; background-color: rgb(56, 56, 56);" />
-                </ui:VisualElement>
-            </SplitView>
-        </ui:VisualElement>
-        <ui:VisualElement name="right-panel" style="flex-shrink: 0;">
+    <SplitView orientation="Horizontal" fixed-pane-initial-dimension="1000" style="flex-shrink: 0;">
+        <ui:VisualElement name="left-panel" style="flex-shrink: 0; width: auto;">
             <ui:Label text="Tree View" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
             <BehaviourTreeView focusable="true" style="flex-grow: 1; flex-shrink: 1;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="right-panel" style="flex-grow: 0;">
+            <ui:Label text="Inspector" display-tooltip-when-elided="true" style="background-color: rgb(37, 37, 37);" />
+            <InspectorView name="InspectorView" style="flex-grow: 1; flex-shrink: 1;" />
         </ui:VisualElement>
     </SplitView>
 </ui:UXML>

@@ -203,10 +203,9 @@ public class NodeView : Node
             case E_State.Running:
                 if (Node.Started) { //节点开始后才加上running 标签
                     AddToClassList("running");
+                    // 可视化运行节点
                     //this.Q<VisualElement>("statebar").style.width = new StyleLength(Length.Percent(50));
-                    statebar.style.width = new StyleLength(Length.Percent(Node.blackboard.RunningDisplay));
-
-                    
+                    //statebar.style.width = new StyleLength(Length.Percent(Node.blackboard.RunningDisplay));
                 }                
                 break;
             case E_State.Failure:
