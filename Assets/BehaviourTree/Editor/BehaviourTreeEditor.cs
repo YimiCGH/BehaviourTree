@@ -5,13 +5,11 @@ using UnityEditor.Callbacks;
 using BT;
 using BT.Util;
 using UnityEditor.UIElements;
-using UnityEditor.Experimental.GraphView;
 
 public class BehaviourTreeEditor : EditorWindow
 {
     BehaviourTreeView treeView;
     InspectorView inspectorView;
-    //IMGUIContainer blackboardView;
     BehaviourTreeBlackboardView blackboardView;
 
     SerializedObject treeObject;
@@ -175,13 +173,13 @@ public class BehaviourTreeEditor : EditorWindow
         AssetDatabase.OpenAsset(asset);
     }
 
-    void OnClickSaveLua() {
-        var path = EditorUtility.SaveFilePanel("导出lua", "Assets/BehaviourTree/BT", "BT_New", "asset");
+    void OnClickSaveLua()
+    {
+        var path = EditorUtility.SaveFilePanel("导出lua", "DevTool/LuaScripts/BehaviourTree/Trees/", "BT_New", "lua");
         if (string.IsNullOrEmpty(path))
         {
             return;
         }
-
         LuaSaveHelper.ExportLua(CurEditrTree, path);
     }
 

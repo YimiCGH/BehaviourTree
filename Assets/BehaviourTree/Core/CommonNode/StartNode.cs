@@ -25,6 +25,6 @@ namespace BT
             StartNode node = Instantiate(this);
             node.Child = Child.Clone();
             return node;
-        }
+        }        
     }
 }

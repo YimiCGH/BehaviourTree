@@ -21,7 +21,6 @@ namespace BT {
         [HideInInspector] public string guid;
         [HideInInspector] public Vector2 position;
         [HideInInspector] public BTBlackboard blackboard;
-        //[HideInInspector] public AIAgent agent;
 
 #if UNITY_EDITOR
         public System.Action<BTNode> OnStartEvent;
@@ -67,6 +66,16 @@ namespace BT {
         protected abstract void OnStop();
         protected abstract E_State OnUpdate();
 
+        public string GetNodeType()
+        {
+            var type = this.GetType();
+            return type.Name;
+        }
+
+        public virtual string GetCreateParams()
+        {
+            return null;
+        }
     }
 
 }

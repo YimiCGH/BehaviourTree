@@ -1,6 +1,6 @@
 ﻿namespace BT
 {
-    public class SequencerNode : CompositeNode
+    public class SequenceNode : CompositeNode
     {
         public enum E_ReturnType
         {
@@ -56,6 +56,6 @@
                     break;
             }
             return _current == Children.Count ? E_State.Success : E_State.Running;
-        }
+        }        
     }
 }

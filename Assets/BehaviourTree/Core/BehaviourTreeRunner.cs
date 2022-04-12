@@ -24,9 +24,6 @@ namespace BT
 
         void ManualCreateBT() {
             _ins_BT = Instantiate(BT);
-            var wait0 = ScriptableObject.CreateInstance<WaitNode>();
-            var wait1 = ScriptableObject.CreateInstance<WaitNode>();
-            var wait2 = ScriptableObject.CreateInstance<WaitNode>();
 
             var delay = ScriptableObject.CreateInstance<DelayNode>();
 
@@ -50,14 +47,11 @@ namespace BT
             logNode2.Message = "Hello 2";
             logNode3.Message = "Delay Log";
 
-            var sequencer = ScriptableObject.CreateInstance<SequencerNode>();
-            sequencer.Children.Add(wait0);
+            var sequencer = ScriptableObject.CreateInstance<SequenceNode>();
+            
             sequencer.Children.Add(logNode0);
-            sequencer.Children.Add(wait1);
             sequencer.Children.Add(logNode1);
-            sequencer.Children.Add(wait2);
             sequencer.Children.Add(logNode2);
-
             sequencer.Children.Add(delay);
 
             _ins_BT.rootNode = sequencer;

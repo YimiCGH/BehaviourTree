@@ -42,7 +42,7 @@ public class NodeView : Node
         descriptionLabel.bindingPath = "Description";//绑定序列化对象的属性名称
         switch (Node)
         {
-            case SequencerNode sequencerNode:
+            case SequenceNode sequencerNode:
                 {
                     var enumField = this.Q<EnumField>("returntype");
                     enumField.Bind(Node_SerializedObj);

@@ -156,7 +156,7 @@ public class BehaviourTreeView : GraphView
         string uiFile ;//各种节点可以自定义界面
         switch (node)
         {            
-            case SequencerNode sequencerNode:
+            case SequenceNode sequencerNode:
                 uiFile = "Assets/BehaviourTree/Editor/CompositeNodeView.uxml";
                 break;
             case ParallelNode parallelNode:

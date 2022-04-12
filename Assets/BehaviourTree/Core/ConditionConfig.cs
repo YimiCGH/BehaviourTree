@@ -1,12 +1,9 @@
-﻿using UnityEditor;
-using UnityEngine;
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 namespace BT
 {
     [System.Serializable]
     public class ConditionConfig
     {
-
         public enum E_ConditionType {
             [LabelText("全部满足")]
             AllFit,

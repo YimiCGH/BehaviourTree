@@ -4,7 +4,7 @@ namespace BT
 {
     public class LogNode : ActionNode
     {
-        public string Message;
+        public string Message = "LogMsg";
         protected override void OnStart()
         {
             Debug.Log(Message);
@@ -21,6 +21,11 @@ namespace BT
             //Debug.Log("OnUpdate:" + Message);
 
             return E_State.Success;
+        }
+
+        public override string GetCreateParams()
+        {
+            return $"'{Message}'";
         }
     }
 }
