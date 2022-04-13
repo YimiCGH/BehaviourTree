@@ -1,7 +1,10 @@
-Library/
-Temp/
-Logs/
-obj/
 *.csproj
+Library/*
+Temp/*
+obj/*
 *.sln
-.vs/
+.vs/*
+Logs/*
+.idea/*
+/UserSettings
+*/IgnoreAssets/
