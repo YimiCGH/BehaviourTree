@@ -14,14 +14,6 @@
     border-bottom-right-radius: 5px;
 }
 
-#input {
-    align-items: center;
-}
-
-#output {
-    align-items: center;
-}
-
 #selection-border {
     border-left-color: rgba(0, 237, 255, 255);
     border-right-color: rgba(0, 237, 255, 255);
@@ -72,10 +64,13 @@
 }
 
 #title {
-    -unity-font-style: bold;
+    -unity-font-style: bold;    
     font-size: 14px;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: rgb(220, 159, 22);
     -unity-slice-right: 0;
+}
+#title-label {
+    color: rgb(255, 255, 255);
 }
 
 #description {
@@ -92,21 +87,24 @@
     background-color: rgba(75, 75, 75, 255);
 }
 
-.action #input {
+.action #title {
     background-color: rgba(157, 141, 241, 255);
 }
+.value #title {
+    background-color: rgb(89, 154, 57);
+}
 
-.decorator #input {
+.decorator #title {
     background-color: rgba(255, 131, 96, 255);
 }
 
-.composite #input {
+.composite #title {
     background-color: rgba(247, 179, 43, 255);
 }
 
-.start #input {
+.start #title {
     min-height: 26px;
-    background-color: rgba(242, 244, 243, 255);
+    background-color: rgb(131, 201, 200);
 }
 
 #statebar {

@@ -73,7 +73,8 @@ public class BehaviourTreeView : GraphView
     {
         return ports.ToList().Where(port => 
             port.direction != startPort.direction &&
-            port.node != startPort.node
+            port.node != startPort.node &&
+            port.portType == startPort.portType
         ).ToList();
     }
 
@@ -100,6 +101,7 @@ public class BehaviourTreeView : GraphView
                 NodeView parentView = edge.output.node as NodeView;
                 NodeView childView = edge.input.node as NodeView;
                 AddChild(parentView.Node,childView.Node);
+                parentView.SortChildren();
             });
         }
 
@@ -129,21 +131,35 @@ public class BehaviourTreeView : GraphView
             var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}]/{type.Name}",(a) => CreateNode(type));
+                evt.menu.AppendAction($"[行为节点]/{type.Name}",(a) => CreateNode(type));
             }
         }
         {
             var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}]/{type.Name}", (a) => CreateNode(type));
+                evt.menu.AppendAction($"[复合节点]/{type.Name}", (a) => CreateNode(type));
             }
         }
         {
             var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[{type.BaseType.Name}]/{type.Name}", (a) => CreateNode(type));
+                evt.menu.AppendAction($"[装饰节点]/{type.Name}", (a) => CreateNode(type));
+            }
+        }
+        {
+            var types = TypeCache.GetTypesDerivedFrom<ValueNode>();
+            foreach (var type in types)
+            {
+                evt.menu.AppendAction($"[变量节点]/{type.Name}", (a) => CreateNode(type));
+            }
+        }
+        {
+            var types = TypeCache.GetTypesDerivedFrom<FunctionNode>();
+            foreach (var type in types)
+            {
+                evt.menu.AppendAction($"[函数节点]/{type.Name}", (a) => CreateNode(type));
             }
         }
     }
@@ -154,31 +170,50 @@ public class BehaviourTreeView : GraphView
     }
 
     void CreateNodeView(BTNode node) {
-        string uiFile ;//各种节点可以自定义界面
+        //各种节点可以自定义界面
+        NodeView nodeView = null;
         switch (node)
-        {            
-            case SequenceNode sequencerNode:
-                uiFile = "Assets/BehaviourTree/Editor/CompositeNodeView.uxml";
+        {
+            case StartNode startNode:
+                nodeView = new StartNodeView(node);
+                break;            
+            case LogNode logNode:
+                nodeView = new LogNodeView(node);
                 break;
-            case ParallelNode parallelNode:
-                uiFile = "Assets/BehaviourTree/Editor/CompositeNodeView.uxml";
+            case PrintValueNode printValueNode:
+                nodeView = new PrintValueNodeView(node);
                 break;
-            case SelectorNode selectorNode:
-                uiFile = "Assets/BehaviourTree/Editor/SelectorNodeView.uxml";
+            case ValueNode valueNode:
+                nodeView = new ValueNodeView(node);
+                break;
+            case FunctionNode functionNode:
+                nodeView = new FunctionNodeView(node);
+                break;
+            case CompareNode compareNode:
+                nodeView = new CompareNodeView(node);
+                break;
+            case CompositeNode compositeNode:
+                nodeView = new CompositeNodeView(node);
+                break;
+            case ActionNode actionNode:
+                nodeView = new ActionNodeView(node);
                 break;
             default:
-                uiFile = "Assets/BehaviourTree/Editor/NodeView.uxml";
+                nodeView = new NodeView(node);
                 break;
         }
         //m_editorWindow.rootVisualElement.ChangeCoordinatesTo(m_editorWindow.rootVisualElement.parent,m_editorWindow.position)
 
-        NodeView nodeView = new NodeView(node, uiFile);
+        
         nodeView.OnNodeSelected = OnNodeSelected;
         AddElement(nodeView);
     }
     void CreateEdge(NodeView parent, NodeView child) {
-        var edge = parent.Output.ConnectTo(child.Input);
-        AddElement(edge);
+        var edge = parent.ConnectNodeView(child);
+        if (edge != null)
+        {
+            AddElement(edge);
+        }
     }
 
     public void UpdateNodeStates() {

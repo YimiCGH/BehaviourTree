@@ -58,16 +58,39 @@ public class BehaviourTreeEditor : EditorWindow
 
     void BindBlackboard(VisualElement root) {
         blackboardView = new BehaviourTreeBlackboardView(root, treeView);
+        blackboardView.visible = false;
     }
 
-    void BindToolbarBtn(VisualElement root) {
-        var create = root.Q<ToolbarButton>("create-btn");
+    void BindToolbarBtn(VisualElement root)
+    {
+        var toolbar = root.Q<Toolbar>();
+        
+        var create = new ToolbarButton{name = "create-btn",text = "创建行为树"};
         create.clicked += OnClickCreate;
-        var open = root.Q<ToolbarButton>("open-btn");
+        toolbar.Add(create);
+        
+        var open = new ToolbarButton{name = "open-btn",text = "打开行为树"};
         open.clicked += OnClickOpen;
-        var savelua = root.Q<ToolbarButton>("savelua-btn");
+        toolbar.Add(open);
+        
+        var savelua = new ToolbarButton{name = "savelua-btn",text = "导出Lua"};
         savelua.clicked += OnClickSaveLua;
+        toolbar.Add(savelua);
+        
+        var newnode =new ToolbarButton{name = "newnode-btn",text = "新建节点"};
+        newnode.clicked += OnClickNewNode;
+        toolbar.Add(newnode);
+
+        var toggleBlackBoard = new ToolbarToggle();
+        toggleBlackBoard.text = "黑板";
+        toggleBlackBoard.RegisterCallback<MouseDownEvent>(_ =>
+        {
+            blackboardView.visible = !toggleBlackBoard.value;
+        },TrickleDown.TrickleDown);
+        toolbar.Add(toggleBlackBoard);
     }
+     
+
 
     private void OnEnable()
     {
@@ -183,5 +206,8 @@ public class BehaviourTreeEditor : EditorWindow
         LuaSaveHelper.ExportLua(CurEditrTree, path);
     }
 
-    
+    void OnClickNewNode()
+    {
+        NewNodeWindow.Open();
+    }
 }
