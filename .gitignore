@@ -8,3 +8,6 @@ Logs/*
 .idea/*
 /UserSettings
 */IgnoreAssets/
+UIElementsSchema/*
+UserSettings/*
+ProjectSettings/*
