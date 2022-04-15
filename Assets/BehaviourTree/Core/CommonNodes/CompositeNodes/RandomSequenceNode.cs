@@ -1,12 +1,10 @@
-﻿namespace BT
+﻿using Sirenix.OdinInspector;
+namespace BT
 {
-    [Category("自定义","方法/TD列表中第rank名格子的TD值（ListTotalDanger）")]
-    [NodeView("BT.FunctionNodeView")]
-    public class ListTotalDanger:FunctionNode
+    [Category("组合","随机序列（RandomSequenceNode）")]
+    public class RandomSequenceNode:CompositeNode
     {
-        [FunctionParams("Rank")]
-        public string Rank;
-        
+        //[Title("将子节点顺序打乱，然后按照普通序列节点的方式执行")]
         protected override void OnStart()
         {
             

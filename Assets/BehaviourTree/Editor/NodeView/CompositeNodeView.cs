@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using UnityEngine;
@@ -7,7 +8,7 @@ namespace BT
 {
     public class CompositeNodeView:NodeView
     {
-        private List<Port> OutPutPorts;
+        protected List<Port> OutPutPorts;
 
         protected override void OnInit()
         {
@@ -22,9 +23,22 @@ namespace BT
             titleContainer.Add(addbtn);
         }
 
-        void AddOutPutPort()
+        protected virtual void AddOutPutPort()
         {
             CreateOutputPort("", Port.Capacity.Single, typeof(bool));
+        }
+        protected override Port CreateOutputPort(string portName, Port.Capacity capacity, Type type)
+        {
+            var port = base.CreateOutputPort(portName, capacity, type);
+            
+            var deleteBtn = new Button(() =>
+            {
+                GraphView.RemovePort(port);
+            }){text = "X"};
+            deleteBtn.style.backgroundColor = new StyleColor(new Color(0.7f, 0.2f, 0));
+            port.contentContainer.Add(deleteBtn);
+            
+            return port;
         }
     }
 }

@@ -13,11 +13,18 @@ public class NodeView : Node
 
     SerializedObject Node_SerializedObj;
 
-    private Port inputPort;
-    private List<Port> outPutPorts;
+    protected Port inputPort;
+    protected List<Port> outPutPorts;
 
-    public void Init(BTNode node)
+    public BehaviourTreeView GraphView
     {
+        get;
+        set;
+    }
+
+    public void Init(BTNode node,BehaviourTreeView _graphView)
+    {
+        GraphView = _graphView;
         Node = node;
         title = node.name;
         LoadStyleSheet();
@@ -34,8 +41,6 @@ public class NodeView : Node
         InitOutputPorts();
         SetupClasses();
         InitMainContain();
-
-        //BindInspector();
 
         node.OnEndEvent = OnNodeEnd;
         RefreshExpandedState();
@@ -102,7 +107,15 @@ public class NodeView : Node
         CreateOutputPort("", Port.Capacity.Single, typeof(bool));
     }
 
-    protected Port CreateOutputPort(string portName,Port.Capacity capacity,Type type)
+    public virtual void RemoveOutputPort(Port _port)
+    {
+        outPutPorts.Remove(_port);
+        outputContainer.Remove(_port);
+        RefreshPorts();
+        RefreshExpandedState(); 
+    }
+
+    protected virtual Port CreateOutputPort(string portName,Port.Capacity capacity,Type type)
     {
         var port = InstantiatePort(Orientation.Horizontal, Direction.Output, capacity, type);
         port.portName = portName;

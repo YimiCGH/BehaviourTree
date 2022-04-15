@@ -1,12 +1,8 @@
 ﻿namespace BT
 {
-    [Category("自定义","方法/TD列表中第rank名格子的TD值（ListTotalDanger）")]
-    [NodeView("BT.FunctionNodeView")]
-    public class ListTotalDanger:FunctionNode
+    [Category("组合","随机选取（RandomPickNode）")]
+    public class RandomPickNode:CompositeNode
     {
-        [FunctionParams("Rank")]
-        public string Rank;
-        
         protected override void OnStart()
         {
             

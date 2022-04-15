@@ -159,7 +159,7 @@ public class BehaviourTreeView : GraphView
         {
             nodeView = new NodeView();
         }
-        nodeView.Init(node);
+        nodeView.Init(node,this);
         //m_editorWindow.rootVisualElement.ChangeCoordinatesTo(m_editorWindow.rootVisualElement.parent,m_editorWindow.position)
 
         
@@ -172,6 +172,26 @@ public class BehaviourTreeView : GraphView
         {
             AddElement(edge);
         }
+    }
+
+    public void RemovePort(Port port)
+    {
+        //目前只处理了单选端口的情况，可以多选的端口删除情况还没处理
+        var targetEdges = edges.ToList().Where(e => e.output == port);
+        if (!targetEdges.Any())
+        {
+            return;
+        }
+
+        var edge = targetEdges.First();
+        var parentView = edge.output.node as NodeView;
+        var childView = edge.input.node as NodeView;
+        RemoveChild(parentView.Node,childView.Node);
+        parentView.RemoveOutputPort(port);
+        edge.output.Disconnect(edge);
+        edge.input.Disconnect(edge);
+        RemoveElement(edge);
+                
     }
 
     public void UpdateNodeStates() {
@@ -253,7 +273,7 @@ public class BehaviourTreeView : GraphView
                 decoratorNode.Child = child;
                 break;
             case CompositeNode compositeNode:
-                compositeNode.Children.Add(child);
+                compositeNode.AddChild(child);
                 break;
             case StartNode startNode:
                 startNode.Child = child;
@@ -275,7 +295,7 @@ public class BehaviourTreeView : GraphView
                 decoratorNode.Child = null;
                 break;
             case CompositeNode compositeNode:
-                compositeNode.Children.Remove(child);
+                compositeNode.RemoveChild(child);
                 break;
             case StartNode startNode:
                 startNode.Child = null;

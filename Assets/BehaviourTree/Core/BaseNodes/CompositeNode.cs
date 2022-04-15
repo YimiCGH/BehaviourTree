@@ -11,6 +11,16 @@ namespace BT
         public string EndRun;
         public List<BTNode> Children = new List<BTNode>();
 
+        public virtual void AddChild(BTNode _node)
+        {
+            Children.Add(_node);
+        }
+
+        public virtual void RemoveChild(BTNode _node)
+        {
+            Children.Remove(_node);
+        }
+
         public override BTNode Clone()
         {
             CompositeNode node = Instantiate(this);
