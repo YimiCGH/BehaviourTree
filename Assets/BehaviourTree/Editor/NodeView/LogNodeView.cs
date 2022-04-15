@@ -6,18 +6,14 @@ namespace BT
     public class LogNodeView: NodeView
     {
         private LogNode _logNode;
-        public LogNodeView(BTNode node):base(node)
-        {
-            _logNode = node as LogNode;
-            Init();
-        }
-
+      
         protected override void InitOutputPorts()
         {
         }
 
-        void Init()
+        protected override void OnInit()
         {
+            _logNode = Node as LogNode;
             var textField = new TextField("");
             textField.RegisterValueChangedCallback(etv =>
             {

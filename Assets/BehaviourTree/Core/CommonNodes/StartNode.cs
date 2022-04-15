@@ -2,7 +2,7 @@
 
 namespace BT
 {
-    
+    [NodeView("BT.StartNodeView")]
     public class StartNode : BTNode
     {
         public BTNode Child;

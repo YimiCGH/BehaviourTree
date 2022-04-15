@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace BT
 {
+    [NodeView("BT.CompositeNodeView")]
     public abstract class CompositeNode : BTNode
     {
         public string PreRun;

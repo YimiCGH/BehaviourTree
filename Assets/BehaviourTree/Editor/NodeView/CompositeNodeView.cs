@@ -8,7 +8,8 @@ namespace BT
     public class CompositeNodeView:NodeView
     {
         private List<Port> OutPutPorts;
-        public CompositeNodeView(BTNode node) : base(node)
+
+        protected override void OnInit()
         {
             OutPutPorts = new List<Port>();
         }

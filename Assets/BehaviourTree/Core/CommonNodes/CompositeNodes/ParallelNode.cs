@@ -1,6 +1,7 @@
 ﻿namespace BT
 {
     [Category("组合","并行（ParallelNode）")]
+    [NodeView("BT.CompositeNodeView")]
     public class ParallelNode : CompositeNode
     {
 

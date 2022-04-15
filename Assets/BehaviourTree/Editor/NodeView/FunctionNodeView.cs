@@ -10,18 +10,16 @@ namespace BT
     public class FunctionNodeView: NodeView
     {
         private FunctionNode _functionNode;
-        public FunctionNodeView(BTNode node) : base(node)
-        {
-            _functionNode = node as FunctionNode;
-            Init();
-        }
+     
 
         protected override void InitOutputPorts()
         {
         }
 
-        void Init()
+        protected override void OnInit()
         {
+            _functionNode = Node as FunctionNode;
+            
             var type = _functionNode.GetType();
             foreach (var field in type.GetFields())
             {

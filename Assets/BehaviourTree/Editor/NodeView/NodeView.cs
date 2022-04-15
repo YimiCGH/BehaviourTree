@@ -16,7 +16,7 @@ public class NodeView : Node
     private Port inputPort;
     private List<Port> outPutPorts;
 
-    public NodeView(BTNode node)
+    public void Init(BTNode node)
     {
         Node = node;
         title = node.name;
@@ -39,6 +39,13 @@ public class NodeView : Node
 
         node.OnEndEvent = OnNodeEnd;
         RefreshExpandedState();
+
+        OnInit();
+    }
+
+    protected virtual void OnInit()
+    {
+        
     }
 
     protected virtual void LoadStyleSheet()

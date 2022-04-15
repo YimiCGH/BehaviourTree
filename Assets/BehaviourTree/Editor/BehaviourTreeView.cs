@@ -148,36 +148,18 @@ public class BehaviourTreeView : GraphView
     void CreateNodeView(BTNode node) {
         //各种节点可以自定义界面
         NodeView nodeView = null;
-        switch (node)
+        var attr = node.GetType().GetCustomAttribute<NodeViewAttribute>();
+        if (attr != null)
         {
-            case StartNode startNode:
-                nodeView = new StartNodeView(node);
-                break;            
-            case LogNode logNode:
-                nodeView = new LogNodeView(node);
-                break;
-            case PrintValueNode printValueNode:
-                nodeView = new PrintValueNodeView(node);
-                break;
-            case ValueNode valueNode:
-                nodeView = new ValueNodeView(node);
-                break;
-            case FunctionNode functionNode:
-                nodeView = new FunctionNodeView(node);
-                break;
-            case CompareNode compareNode:
-                nodeView = new CompareNodeView(node);
-                break;
-            case CompositeNode compositeNode:
-                nodeView = new CompositeNodeView(node);
-                break;
-            case ActionNode actionNode:
-                nodeView = new ActionNodeView(node);
-                break;
-            default:
-                nodeView = new NodeView(node);
-                break;
+            var type = Type.GetType(attr.ViewName);//类名需要带命名空间，不然会找不到
+            var instance = Activator.CreateInstance(type) ;
+            nodeView = instance as NodeView;
         }
+        else
+        {
+            nodeView = new NodeView();
+        }
+        nodeView.Init(node);
         //m_editorWindow.rootVisualElement.ChangeCoordinatesTo(m_editorWindow.rootVisualElement.parent,m_editorWindow.position)
 
         
