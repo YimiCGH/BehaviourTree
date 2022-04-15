@@ -2,6 +2,7 @@
 
 namespace BT
 {
+    
     public class StartNode : BTNode
     {
         public BTNode Child;

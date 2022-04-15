@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BT
 {
+    [Category("组合","筛选（SelectorNode）")]
     public class SelectorNode : CompositeNode
     {
         protected override void OnStart()

@@ -22,15 +22,6 @@ namespace BT
 
         void Init()
         {
-            var Node_SerializedObj = new SerializedObject(_functionNode);
-            TextField compareField = new TextField();
-            compareField.label = "调用函数";
-            compareField.Bind(Node_SerializedObj);
-            compareField.bindingPath = "FunctionName";
-            compareField.SetValueWithoutNotify(_functionNode.FunctionName);
-            mainContainer.Add(compareField);
-            
-            
             var type = _functionNode.GetType();
             foreach (var field in type.GetFields())
             {

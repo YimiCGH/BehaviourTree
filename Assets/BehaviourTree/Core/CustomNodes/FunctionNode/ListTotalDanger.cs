@@ -1,5 +1,6 @@
 ﻿namespace BT
 {
+    [Category("自定义","方法/TD列表中第rank名格子的TD值（ListTotalDanger）")]
     public class ListTotalDanger:FunctionNode
     {
         [FunctionParams("Rank")]

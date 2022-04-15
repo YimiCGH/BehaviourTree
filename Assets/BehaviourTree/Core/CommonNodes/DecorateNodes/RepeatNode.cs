@@ -1,5 +1,6 @@
 ﻿namespace BT
 {
+    [Category("装饰","重复子节点（RepeatNode）")]
     public class RepeatNode : DecoratorNode
     {     
         protected override void OnStart()

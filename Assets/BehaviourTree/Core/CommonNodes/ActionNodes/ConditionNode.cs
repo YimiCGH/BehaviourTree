@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace BT
 {
+    [Category("行为","条件节点（ConditionNode）")]
     public class ConditionNode : ActionNode
     {
         public ConditionConfig ConditionConfig = new ConditionConfig();

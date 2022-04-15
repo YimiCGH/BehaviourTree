@@ -1,5 +1,6 @@
 ﻿namespace BT
 {
+    [Category("变量","常量节点（ConstValue）")]
     public class ConstValue:ValueNode
     {
         protected override void OnStart()

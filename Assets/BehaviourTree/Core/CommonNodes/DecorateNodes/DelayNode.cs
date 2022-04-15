@@ -2,6 +2,7 @@
 
 namespace BT
 {
+    [Category("装饰","延迟子节点（DelayNode）")]
     public class DelayNode : DecoratorNode
     {
         public float Duration = 1f;

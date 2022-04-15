@@ -5,6 +5,7 @@ using System;
 using BT;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class BehaviourTreeView : GraphView
@@ -126,40 +127,15 @@ public class BehaviourTreeView : GraphView
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
         localMousePosition = evt.localMousePosition;
-        //base.BuildContextualMenu(evt);
         {
-            var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
+            var types = TypeCache.GetTypesDerivedFrom<BTNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[行为节点]/{type.Name}",(a) => CreateNode(type));
-            }
-        }
-        {
-            var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
-            foreach (var type in types)
-            {
-                evt.menu.AppendAction($"[复合节点]/{type.Name}", (a) => CreateNode(type));
-            }
-        }
-        {
-            var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
-            foreach (var type in types)
-            {
-                evt.menu.AppendAction($"[装饰节点]/{type.Name}", (a) => CreateNode(type));
-            }
-        }
-        {
-            var types = TypeCache.GetTypesDerivedFrom<ValueNode>();
-            foreach (var type in types)
-            {
-                evt.menu.AppendAction($"[变量节点]/{type.Name}", (a) => CreateNode(type));
-            }
-        }
-        {
-            var types = TypeCache.GetTypesDerivedFrom<FunctionNode>();
-            foreach (var type in types)
-            {
-                evt.menu.AppendAction($"[函数节点]/{type.Name}", (a) => CreateNode(type));
+                var attr = type.GetCustomAttribute<CategoryAttribute>();
+                if (attr != null)
+                {
+                    evt.menu.AppendAction($"[{attr.CategoryName}]/{attr.SubName}",(a) => CreateNode(type));    
+                }
             }
         }
     }

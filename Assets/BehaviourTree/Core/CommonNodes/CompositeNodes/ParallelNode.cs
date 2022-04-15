@@ -1,5 +1,6 @@
 ﻿namespace BT
 {
+    [Category("组合","并行（ParallelNode）")]
     public class ParallelNode : CompositeNode
     {
 

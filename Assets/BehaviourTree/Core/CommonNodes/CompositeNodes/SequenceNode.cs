@@ -1,5 +1,6 @@
 ﻿namespace BT
 {
+    [Category("组合","序列（SequenceNode）")]
     public class SequenceNode : CompositeNode
     {
         public enum E_ReturnType

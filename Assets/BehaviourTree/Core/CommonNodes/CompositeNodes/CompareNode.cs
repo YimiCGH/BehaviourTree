@@ -3,6 +3,7 @@ using Sirenix.OdinInspector;
 
 namespace BT
 {    
+    [Category("组合","比较（CompareNode）")]
     public class CompareNode:CompositeNode
     {
         [HorizontalGroup,ValueDropdown("GetCompareString"), LabelText("比较类型")]

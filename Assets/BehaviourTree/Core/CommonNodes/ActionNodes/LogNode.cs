@@ -2,6 +2,7 @@
 
 namespace BT
 {
+    [Category("调试","打印信息（LogNode）")]
     public class LogNode : ActionNode
     {
         public string Message = "LogMsg";
