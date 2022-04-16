@@ -8,7 +8,7 @@ namespace BT
         public BTNode rootNode;
         public E_State treeState = E_State.Running;
         public List<BTNode> Nodes = new List<BTNode>();
-
+        public List<NodeGroup> Groups = new List<NodeGroup>();
         public BTBlackboard Blackboard ;
   
         public E_State Update() {

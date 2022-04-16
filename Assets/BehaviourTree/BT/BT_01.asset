@@ -101,7 +101,7 @@ MonoBehaviour:
   End: 0
   Description: "\u63CF\u8FF0..."
   guid: e2ef7a2f8b07bd548af4f71164e312f4
-  position: {x: 332.99997, y: -112}
+  position: {x: 451, y: -214.01135}
   blackboard: {fileID: 0}
   Child: {fileID: -4409301938796860033}
 --- !u!114 &-6482192323151654063
@@ -212,7 +212,7 @@ MonoBehaviour:
   End: 0
   Description: "\u63CF\u8FF0..."
   guid: ded1bce4bc4bf5b4e97b5b4c5515bd4a
-  position: {x: 637, y: -112}
+  position: {x: 931.7614, y: -121.99994}
   blackboard: {fileID: 0}
   ValueName: 10
 --- !u!114 &-982388712909919015
@@ -232,7 +232,7 @@ MonoBehaviour:
   End: 0
   Description: "\u63CF\u8FF0..."
   guid: 9bbc558e3e2a7aa40bb2b0e681831e2d
-  position: {x: 341.99997, y: 184.51788}
+  position: {x: 460, y: 82.98865}
   blackboard: {fileID: 0}
   Message: LogMsg
 --- !u!114 &-515834129291106247
@@ -291,6 +291,17 @@ MonoBehaviour:
   - {fileID: -515834129291106247}
   - {fileID: 5705836248936563868}
   - {fileID: -6324604827604057236}
+  Groups:
+  - guid: 0b6662c5-8790-45ec-b274-89721823ea66
+    Title: "\u653B\u51FB"
+    Nodes:
+    - {fileID: -6542368331921982791}
+    - {fileID: 728340997416728586}
+    - {fileID: -982388712909919015}
+  - guid: 58107dd3-370d-470f-b0fa-bc3e61f57b95
+    Title: "\u8FD9\u662F\u4E00\u4E2A\u6D4B\u8BD5"
+    Nodes:
+    - {fileID: -4409301938796860033}
   Blackboard: {fileID: 0}
 --- !u!114 &728340997416728586
 MonoBehaviour:
@@ -309,7 +320,7 @@ MonoBehaviour:
   End: 0
   Description: "\u63CF\u8FF0..."
   guid: 1f410e07382e1f64bb52f6990b6cec3c
-  position: {x: 342, y: 20.99997}
+  position: {x: 450.99997, y: -80.99994}
   blackboard: {fileID: 0}
   ConditionConfig:
     ConditionType: 0
@@ -381,7 +392,7 @@ MonoBehaviour:
   End: 0
   Description: "\u63CF\u8FF0..."
   guid: 3784b22dd68c1684988a793d79b0414f
-  position: {x: -101, y: -194}
+  position: {x: -56, y: -270.01135}
   blackboard: {fileID: 0}
   PreRun: 
   EndRun: 

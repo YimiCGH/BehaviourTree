@@ -26,7 +26,6 @@ namespace BT
                 var attr = field.GetCustomAttribute<FunctionParamsAttribute>();
                 if (attr != null)
                 {
-                    Debug.Log($"{attr.ParamName}");
                     CreateOutputPort(attr.ParamName, Port.Capacity.Single, typeof(string));
                 }
             }

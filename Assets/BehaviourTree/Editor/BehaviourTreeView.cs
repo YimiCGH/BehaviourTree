@@ -21,12 +21,45 @@ public class BehaviourTreeView : GraphView
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
+        this.AddManipulator(CreateGroupContextualMenu());
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/BehaviourTree/Editor/BehaviourTreeEditor.uss");
         styleSheets.Add(styleSheet);
 
+        elementsAddedToGroup += OnAddElementToGroup;
+        elementsRemovedFromGroup += OnRemoveElementToGroup;
+
         Undo.undoRedoPerformed += OnUndoRedo;
     }
+
+    private void OnRemoveElementToGroup(Group group, IEnumerable<GraphElement> arg2)
+    {
+        foreach (var element in arg2)
+        {
+            var node = element as NodeView;
+            if (node != null)
+            {
+                var ngroup = GetNodeGroup(group);
+                ngroup.RemoveNode(node.Node);
+                Debug.Log($"remove {node.title} from {group.title}");
+            }
+        }
+    }
+
+    private void OnAddElementToGroup(Group group, IEnumerable<GraphElement> arg2)
+    {
+        foreach (var element in arg2)
+        {
+            var node = element as NodeView;
+            if (node != null)
+            {
+                var ngroup = GetNodeGroup(group);
+                ngroup.RemoveNode(node.Node);
+                Debug.Log($"Add {node.title} to {group.title}");
+            }
+        }
+    }
+
     private void OnUndoRedo()
     {
         UpdateTreeView(_tree);
@@ -35,6 +68,17 @@ public class BehaviourTreeView : GraphView
 
     NodeView FindNodeView(BTNode node) {
         return GetNodeByGuid(node.guid) as NodeView;
+    }
+
+    NodeGroup GetNodeGroup(Group group)
+    {
+        var res = _tree.Groups.Where(ng => ng.guid == group.viewDataKey);
+        if (res.Any())
+        {
+            return res.First();
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -68,6 +112,13 @@ public class BehaviourTreeView : GraphView
                 });
             }
         });
+        
+        //Create Group
+        foreach (var ngroup in _tree.Groups)
+        {
+            AddElement(CreateGroup(ngroup));
+        }
+       
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -94,6 +145,16 @@ public class BehaviourTreeView : GraphView
                     NodeView childView = edge.input.node as NodeView;
                     RemoveChild(parentView.Node, childView.Node);
                 }
+                
+                Group group = element as Group;
+                if (group != null)
+                {
+                    var ngroup = GetNodeGroup(group);
+                    _tree.Groups.Remove(ngroup);
+                    Debug.Log($"remove group {ngroup.Title}");
+                }
+
+                
             });
         }
 
@@ -138,6 +199,98 @@ public class BehaviourTreeView : GraphView
                 }
             }
         }
+    }
+
+    private IManipulator CreateGroupContextualMenu()
+    {
+        ContextualMenuManipulator manipulator = new ContextualMenuManipulator(
+            evt =>
+            {
+                evt.menu.AppendAction("Add Group",
+                    actionEvt =>
+                    {
+                        var group = CreateGroup("Group", actionEvt.eventInfo.localMousePosition);
+                        if(group != null)
+                            AddElement(group);
+                    });
+                evt.menu.AppendAction("Remove Group",
+                    actionEvt =>
+                    {
+                        foreach (var obj in selection)
+                        {
+                            var g = obj as Group;
+                            if (g != null)
+                            {
+                                var ng = GetNodeGroup(g);                                
+                                var nodes = ng.Nodes.ConvertAll<NodeView>(n => FindNodeView(n));
+                                
+                                foreach (var node in nodes)
+                                {                                 
+                                    g.RemoveElement(node);
+                                }
+                                RemoveElement(g);
+                                _tree.Groups.Remove(ng);
+                            }
+                            break;
+                        }
+                        
+                    });
+            });
+        return manipulator;
+    }
+
+    GraphElement CreateGroup(NodeGroup ngroup)
+    {
+        Group group = new Group()
+        {
+            title = ngroup.Title
+        };
+        group.viewDataKey = ngroup.guid;
+        var title = group.Q<Label>("titleLabel");
+        title.RegisterValueChangedCallback(evt => ngroup.Title = evt.newValue);
+        foreach (var node in ngroup.Nodes)
+        {            
+            var n =  FindNodeView(node);
+            if (n != null)
+            {
+                group.AddElement(n);
+            }
+        }
+
+        return group;
+    }
+
+    GraphElement CreateGroup(string groupName,Vector2 position)
+    {
+        if (selection.Count == 0)
+        {
+            return null;
+        }
+
+        Group group = new Group()
+        {
+            title = groupName
+        };
+        group.SetPosition(new Rect(position,Vector2.zero));
+        NodeGroup ngroup = new NodeGroup();
+        ngroup.guid = group.viewDataKey;
+        ngroup.Title = group.title;
+
+        var title = group.Q<Label>("titleLabel");
+        title.RegisterValueChangedCallback(evt => ngroup.Title = evt.newValue);
+        
+        foreach (var obj in selection)
+        {
+            var n = obj as NodeView;
+            if (n != null)
+            {
+                Debug.Log(n.title);
+                group.AddElement(n);
+                ngroup.AddNode(n.Node);
+            }
+        }
+        _tree.Groups.Add(ngroup);
+        return group;
     }
 
     void CreateNode(System.Type type) {
