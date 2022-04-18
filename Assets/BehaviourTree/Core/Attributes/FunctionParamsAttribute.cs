@@ -5,7 +5,7 @@ namespace BT
     [AttributeUsage(AttributeTargets.Field)]
     public class FunctionParamsAttribute:Attribute
     {
-        public string ParamName { get; set; }
+        public string ParamName { get;private set; }
 
         public FunctionParamsAttribute(string _paramName)
         {

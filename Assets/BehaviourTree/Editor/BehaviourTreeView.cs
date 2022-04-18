@@ -5,6 +5,7 @@ using System;
 using BT;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 public class BehaviourTreeView : GraphView
@@ -20,12 +21,45 @@ public class BehaviourTreeView : GraphView
         this.AddManipulator(new ContentDragger());
         this.AddManipulator(new SelectionDragger());
         this.AddManipulator(new RectangleSelector());
+        this.AddManipulator(CreateGroupContextualMenu());
 
         var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/BehaviourTree/Editor/BehaviourTreeEditor.uss");
         styleSheets.Add(styleSheet);
 
+        elementsAddedToGroup += OnAddElementToGroup;
+        elementsRemovedFromGroup += OnRemoveElementToGroup;
+
         Undo.undoRedoPerformed += OnUndoRedo;
     }
+
+    private void OnRemoveElementToGroup(Group group, IEnumerable<GraphElement> arg2)
+    {
+        foreach (var element in arg2)
+        {
+            var node = element as NodeView;
+            if (node != null)
+            {
+                var ngroup = GetNodeGroup(group);
+                ngroup.RemoveNode(node.Node);
+                Debug.Log($"remove {node.title} from {group.title}");
+            }
+        }
+    }
+
+    private void OnAddElementToGroup(Group group, IEnumerable<GraphElement> arg2)
+    {
+        foreach (var element in arg2)
+        {
+            var node = element as NodeView;
+            if (node != null)
+            {
+                var ngroup = GetNodeGroup(group);
+                ngroup.RemoveNode(node.Node);
+                Debug.Log($"Add {node.title} to {group.title}");
+            }
+        }
+    }
+
     private void OnUndoRedo()
     {
         UpdateTreeView(_tree);
@@ -34,6 +68,17 @@ public class BehaviourTreeView : GraphView
 
     NodeView FindNodeView(BTNode node) {
         return GetNodeByGuid(node.guid) as NodeView;
+    }
+
+    NodeGroup GetNodeGroup(Group group)
+    {
+        var res = _tree.Groups.Where(ng => ng.guid == group.viewDataKey);
+        if (res.Any())
+        {
+            return res.First();
+        }
+
+        return null;
     }
 
     /// <summary>
@@ -67,6 +112,13 @@ public class BehaviourTreeView : GraphView
                 });
             }
         });
+        
+        //Create Group
+        foreach (var ngroup in _tree.Groups)
+        {
+            AddElement(CreateGroup(ngroup));
+        }
+       
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -93,6 +145,16 @@ public class BehaviourTreeView : GraphView
                     NodeView childView = edge.input.node as NodeView;
                     RemoveChild(parentView.Node, childView.Node);
                 }
+                
+                Group group = element as Group;
+                if (group != null)
+                {
+                    var ngroup = GetNodeGroup(group);
+                    _tree.Groups.Remove(ngroup);
+                    Debug.Log($"remove group {ngroup.Title}");
+                }
+
+                
             });
         }
 
@@ -126,42 +188,109 @@ public class BehaviourTreeView : GraphView
     public override void BuildContextualMenu(ContextualMenuPopulateEvent evt)
     {
         localMousePosition = evt.localMousePosition;
-        //base.BuildContextualMenu(evt);
         {
-            var types = TypeCache.GetTypesDerivedFrom<ActionNode>();
+            var types = TypeCache.GetTypesDerivedFrom<BTNode>();
             foreach (var type in types)
             {
-                evt.menu.AppendAction($"[行为节点]/{type.Name}",(a) => CreateNode(type));
+                var attr = type.GetCustomAttribute<CategoryAttribute>();
+                if (attr != null)
+                {
+                    evt.menu.AppendAction($"[{attr.CategoryName}]/{attr.SubName}",(a) => CreateNode(type));    
+                }
             }
         }
-        {
-            var types = TypeCache.GetTypesDerivedFrom<CompositeNode>();
-            foreach (var type in types)
+    }
+
+    private IManipulator CreateGroupContextualMenu()
+    {
+        ContextualMenuManipulator manipulator = new ContextualMenuManipulator(
+            evt =>
             {
-                evt.menu.AppendAction($"[复合节点]/{type.Name}", (a) => CreateNode(type));
-            }
-        }
+                evt.menu.AppendAction("Add Group",
+                    actionEvt =>
+                    {
+                        var group = CreateGroup("Group", actionEvt.eventInfo.localMousePosition);
+                        if(group != null)
+                            AddElement(group);
+                    });
+                evt.menu.AppendAction("Remove Group",
+                    actionEvt =>
+                    {
+                        foreach (var obj in selection)
+                        {
+                            var g = obj as Group;
+                            if (g != null)
+                            {
+                                var ng = GetNodeGroup(g);                                
+                                var nodes = ng.Nodes.ConvertAll<NodeView>(n => FindNodeView(n));
+                                
+                                foreach (var node in nodes)
+                                {                                 
+                                    g.RemoveElement(node);
+                                }
+                                RemoveElement(g);
+                                _tree.Groups.Remove(ng);
+                            }
+                            break;
+                        }
+                        
+                    });
+            });
+        return manipulator;
+    }
+
+    GraphElement CreateGroup(NodeGroup ngroup)
+    {
+        Group group = new Group()
         {
-            var types = TypeCache.GetTypesDerivedFrom<DecoratorNode>();
-            foreach (var type in types)
+            title = ngroup.Title
+        };
+        group.viewDataKey = ngroup.guid;
+        var title = group.Q<Label>("titleLabel");
+        title.RegisterValueChangedCallback(evt => ngroup.Title = evt.newValue);
+        foreach (var node in ngroup.Nodes)
+        {            
+            var n =  FindNodeView(node);
+            if (n != null)
             {
-                evt.menu.AppendAction($"[装饰节点]/{type.Name}", (a) => CreateNode(type));
+                group.AddElement(n);
             }
         }
+
+        return group;
+    }
+
+    GraphElement CreateGroup(string groupName,Vector2 position)
+    {
+        if (selection.Count == 0)
         {
-            var types = TypeCache.GetTypesDerivedFrom<ValueNode>();
-            foreach (var type in types)
-            {
-                evt.menu.AppendAction($"[变量节点]/{type.Name}", (a) => CreateNode(type));
-            }
+            return null;
         }
+
+        Group group = new Group()
         {
-            var types = TypeCache.GetTypesDerivedFrom<FunctionNode>();
-            foreach (var type in types)
+            title = groupName
+        };
+        group.SetPosition(new Rect(position,Vector2.zero));
+        NodeGroup ngroup = new NodeGroup();
+        ngroup.guid = group.viewDataKey;
+        ngroup.Title = group.title;
+
+        var title = group.Q<Label>("titleLabel");
+        title.RegisterValueChangedCallback(evt => ngroup.Title = evt.newValue);
+        
+        foreach (var obj in selection)
+        {
+            var n = obj as NodeView;
+            if (n != null)
             {
-                evt.menu.AppendAction($"[函数节点]/{type.Name}", (a) => CreateNode(type));
+                Debug.Log(n.title);
+                group.AddElement(n);
+                ngroup.AddNode(n.Node);
             }
         }
+        _tree.Groups.Add(ngroup);
+        return group;
     }
 
     void CreateNode(System.Type type) {
@@ -172,36 +301,18 @@ public class BehaviourTreeView : GraphView
     void CreateNodeView(BTNode node) {
         //各种节点可以自定义界面
         NodeView nodeView = null;
-        switch (node)
+        var attr = node.GetType().GetCustomAttribute<NodeViewAttribute>();
+        if (attr != null)
         {
-            case StartNode startNode:
-                nodeView = new StartNodeView(node);
-                break;            
-            case LogNode logNode:
-                nodeView = new LogNodeView(node);
-                break;
-            case PrintValueNode printValueNode:
-                nodeView = new PrintValueNodeView(node);
-                break;
-            case ValueNode valueNode:
-                nodeView = new ValueNodeView(node);
-                break;
-            case FunctionNode functionNode:
-                nodeView = new FunctionNodeView(node);
-                break;
-            case CompareNode compareNode:
-                nodeView = new CompareNodeView(node);
-                break;
-            case CompositeNode compositeNode:
-                nodeView = new CompositeNodeView(node);
-                break;
-            case ActionNode actionNode:
-                nodeView = new ActionNodeView(node);
-                break;
-            default:
-                nodeView = new NodeView(node);
-                break;
+            var type = Type.GetType(attr.ViewName);//类名需要带命名空间，不然会找不到
+            var instance = Activator.CreateInstance(type) ;
+            nodeView = instance as NodeView;
         }
+        else
+        {
+            nodeView = new NodeView();
+        }
+        nodeView.Init(node,this);
         //m_editorWindow.rootVisualElement.ChangeCoordinatesTo(m_editorWindow.rootVisualElement.parent,m_editorWindow.position)
 
         
@@ -214,6 +325,26 @@ public class BehaviourTreeView : GraphView
         {
             AddElement(edge);
         }
+    }
+
+    public void RemovePort(Port port)
+    {
+        //目前只处理了单选端口的情况，可以多选的端口删除情况还没处理
+        var targetEdges = edges.ToList().Where(e => e.output == port);
+        if (!targetEdges.Any())
+        {
+            return;
+        }
+
+        var edge = targetEdges.First();
+        var parentView = edge.output.node as NodeView;
+        var childView = edge.input.node as NodeView;
+        RemoveChild(parentView.Node,childView.Node);
+        parentView.RemoveOutputPort(port);
+        edge.output.Disconnect(edge);
+        edge.input.Disconnect(edge);
+        RemoveElement(edge);
+                
     }
 
     public void UpdateNodeStates() {
@@ -295,7 +426,7 @@ public class BehaviourTreeView : GraphView
                 decoratorNode.Child = child;
                 break;
             case CompositeNode compositeNode:
-                compositeNode.Children.Add(child);
+                compositeNode.AddChild(child);
                 break;
             case StartNode startNode:
                 startNode.Child = child;
@@ -317,7 +448,7 @@ public class BehaviourTreeView : GraphView
                 decoratorNode.Child = null;
                 break;
             case CompositeNode compositeNode:
-                compositeNode.Children.Remove(child);
+                compositeNode.RemoveChild(child);
                 break;
             case StartNode startNode:
                 startNode.Child = null;

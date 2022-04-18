@@ -4,11 +4,22 @@ using UnityEngine;
 
 namespace BT
 {
+    [NodeView("BT.CompositeNodeView")]
     public abstract class CompositeNode : BTNode
     {
         public string PreRun;
         public string EndRun;
         public List<BTNode> Children = new List<BTNode>();
+
+        public virtual void AddChild(BTNode _node)
+        {
+            Children.Add(_node);
+        }
+
+        public virtual void RemoveChild(BTNode _node)
+        {
+            Children.Remove(_node);
+        }
 
         public override BTNode Clone()
         {

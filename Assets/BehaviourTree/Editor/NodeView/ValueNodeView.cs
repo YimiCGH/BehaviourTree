@@ -8,12 +8,7 @@ namespace BT
     public class ValueNodeView: NodeView
     {
         private ValueNode _valueNode;
-        public ValueNodeView(BTNode node) : base(node)
-        {
-            _valueNode = node as ValueNode;
-            Init();
-        }
-
+   
         protected override void InitInputPorts()
         {
             CreateInputPort("", Port.Capacity.Single, typeof(string));
@@ -23,8 +18,9 @@ namespace BT
         {
         }
 
-        void Init()
+        protected override void OnInit()
         {
+            _valueNode = Node as ValueNode;
             var Node_SerializedObj = new SerializedObject(_valueNode);
             TextField nameField = new TextField();
             nameField.Bind(Node_SerializedObj);

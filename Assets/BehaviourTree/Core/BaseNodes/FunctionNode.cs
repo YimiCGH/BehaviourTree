@@ -2,11 +2,8 @@
 
 namespace BT
 {
-    public abstract class FunctionNode:BTNode
+    public abstract class FunctionNode:CompositeNode
     {
-        public string FunctionName;
-        
-        public List<BTNode> Children = new List<BTNode>();
         public override BTNode Clone()
         {
             FunctionNode node = Instantiate(this);

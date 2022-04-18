@@ -1,5 +1,7 @@
 ﻿namespace BT
 {
+    [Category("调试","打印子节点返回值（PrintValueNode）")]
+    [NodeView("BT.PrintValueNodeView")]
     public class PrintValueNode:DecoratorNode
     {
 

@@ -1,10 +1,14 @@
 ﻿using System.Text;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace BT
 {
+    [Category("行为","条件节点（ConditionNode）")]
+    [NodeView("BT.ActionNodeView")]
     public class ConditionNode : ActionNode
     {
+        [HideLabel]
         public ConditionConfig ConditionConfig = new ConditionConfig();
 
         protected override void OnStart()

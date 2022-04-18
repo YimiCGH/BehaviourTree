@@ -8,20 +8,16 @@ namespace BT
     public class CompareNodeView: NodeView
     {
         private CompareNode _compareNode;
-        public CompareNodeView(BTNode node) : base(node)
-        {
-            _compareNode = node as CompareNode;
-            Init();
-        }
-
+   
         protected override void InitOutputPorts()
         {
             CreateOutputPort("A", Port.Capacity.Single, typeof(string));
             CreateOutputPort("B", Port.Capacity.Single, typeof(string));
         }
-
-        void Init()
+        protected override void OnInit()
         {
+            _compareNode = Node as CompareNode;
+            
             VisualElement container = new VisualElement();
 
             var leftLabel = new Label("A"); 
