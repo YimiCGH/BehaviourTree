@@ -171,6 +171,29 @@ MonoBehaviour:
   position: {x: 655.99994, y: 833.179}
   blackboard: {fileID: 0}
   ValueName: 
+--- !u!114 &-5221378614279530175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24b0e59ff47c354ab6e2f15f45083f0, type: 3}
+  m_Name: SequenceNode
+  m_EditorClassIdentifier: 
+  State: 0
+  Started: 0
+  End: 0
+  Description: "\u63CF\u8FF0..."
+  guid: 6f1ab3ce2ceb1a6449c1830cae56f4d8
+  position: {x: 173, y: 252}
+  blackboard: {fileID: 0}
+  PreRun: 
+  EndRun: 
+  Children: []
+  ReturnType: 0
 --- !u!114 &-4886699623057847617
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,6 +314,7 @@ MonoBehaviour:
   - {fileID: -515834129291106247}
   - {fileID: 5705836248936563868}
   - {fileID: -6324604827604057236}
+  - {fileID: -5221378614279530175}
   Groups:
   - guid: 0b6662c5-8790-45ec-b274-89721823ea66
     Title: "\u653B\u51FB"

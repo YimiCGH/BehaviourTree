@@ -1,4 +1,4 @@
-﻿using UnityEditor;
+using UnityEditor;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System;
@@ -118,7 +118,6 @@ public class BehaviourTreeView : GraphView
         {
             AddElement(CreateGroup(ngroup));
         }
-       
     }
 
     public override List<Port> GetCompatiblePorts(Port startPort, NodeAdapter nodeAdapter)
@@ -333,9 +332,11 @@ public class BehaviourTreeView : GraphView
         var targetEdges = edges.ToList().Where(e => e.output == port);
         if (!targetEdges.Any())
         {
+            //没有任何连线，可以直接删除该端口
+            var nodeview = port.node as NodeView;
+            nodeview.RemoveOutputPort(port);
             return;
         }
-
         var edge = targetEdges.First();
         var parentView = edge.output.node as NodeView;
         var childView = edge.input.node as NodeView;

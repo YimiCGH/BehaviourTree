@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
@@ -69,7 +69,6 @@ namespace BT
             int index = outPutPorts.IndexOf(_port);
             outPutPorts.RemoveAt(index);
             outputContainer.Remove(_port);
-            _weightPickNode.Weights.RemoveAt(index);
             RefreshPorts();
             RefreshExpandedState();
         }
